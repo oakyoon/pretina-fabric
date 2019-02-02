@@ -2,7 +2,7 @@ function image_mask = load_image_mask(varargin)
 	init_pretina();
 	image_file = pretina_arg(varargin, 1, mfilename, 'image_file', [], {'char'}, {'nonempty', 'row'});
 
-	image_mask = double(ptb.imread_(image_file)) / 255;
+	image_mask = double(ptb.imread_alpha(image_file)) / 255;
 	n_layers = size(image_mask, 3);
 	if n_layers == 4
 		image_mask = apply_alpha(0, ...

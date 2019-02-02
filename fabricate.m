@@ -3,6 +3,7 @@ function imagemats = fabricate(varargin)
 	rows   = pretina_arg(varargin, 1, mfilename, 'rows',   [],   {'numeric'}, {'scalar', 'integer', 'finite', 'positive'});
 	cols   = pretina_arg(varargin, 2, mfilename, 'cols',   rows, {'numeric'}, {'scalar', 'integer', 'finite', 'positive'});
 	shapes = pretina_arg(varargin, 3, mfilename, 'shapes', [],   {'struct'},  {'nonempty'});
+	shapes = shapes(arrayfun(@(s) ~isempty(s.coords), shapes));
 
 	n_shapes = size(shapes, 1);
 	if (nargin >= 4) && (size(varargin{4}, 1) == 1)
@@ -19,7 +20,7 @@ function imagemats = fabricate(varargin)
 	n_layers = max(arrayfun(@(s) s.im_layer, shapes));
 	imagemats = repmat({zeros(rows, cols, 4)}, n_layers, 1);
 	[bx, by] = base_xy(cols, rows);
-	for i = find(arrayfun(@(s) ~isempty(s.coords), shapes))'
+	for i = 1:n_shapes
 		im_layer = shapes(i).im_layer;
 		shapemat = shapes(i).shapefunc( ...
 				bx - shapes(i).coords(1), ...
